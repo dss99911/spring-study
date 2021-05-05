@@ -1,0 +1,12 @@
+
+<!--insert and if duplicated, then update -->
+<insert id="upsertFoo" parameterType="map">
+    INSERT INTO foo(name, id)
+    VALUES
+    <foreach collection="foos" item="foo" separator=",">
+        (#{id}, #{foo.id}, #{foo.name})
+    </foreach>
+    ON DUPLICATE KEY
+    UPDATE name = VALUES(name),
+    id = VALUES(id)
+</insert>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--LEVEL : TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF -->
+<!--Reference : https://ckddn9496.tistory.com/79 -->
+<configuration scan="true" scanPeriod="10 seconds">
+    <property name="LOG_HOME" value="./"/>
+    <property name="FILE_PREFIX_NAME" value="app-api"/>
+
+    <springProfile name="dev">
+        <property name="LOG_HOME" value="./"/>
+    </springProfile>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${FILE_PREFIX_NAME}.%d{yyyy-MM-dd}.log.zip</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
+        </encoder>
+        <filter class="kim.jeonghyeon.study.spring.util.slack.DenyExceptionLogFilter" />
+    </appender>
+
+    <!-- send log to slack -->/
+    <appender name="SLACK" class="kim.jeonghyeon.study.spring.util.slack.LogbackSlackAppender">
+        <webhookUri>https://hooks.slack.com/services/your-token</webhookUri>
+        <channel>hyun</channel>
+        <componentName>APP</componentName>
+        <phase>RELEASE</phase>
+        <filter class="kim.jeonghyeon.study.spring.util.slack.DenyExceptionLogFilter"/>
+    </appender>
+
+    <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SLACK" />
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>true</neverBlock>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <root level="WARN">
+        <appender-ref ref="ASYNC_SLACK" />
+        <appender-ref ref="fileAppender" />
+    </root>
+</configuration>
