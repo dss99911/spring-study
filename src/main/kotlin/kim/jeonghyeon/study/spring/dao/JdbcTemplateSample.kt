@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
 
+
+/**
+ * https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/jdbc.html
+ */
 @Service
 class JdbcTemplateSample(
     @Autowired
