@@ -7,7 +7,7 @@ import kotlin.jvm.Transient
 
 @Entity
 class DomainExample(
-    @Id var id: Int? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Int? = null,
 //    @Id var id2: Int? = null,//able to use multiple primary key
     var title: String,
     @Enumerated(EnumType.ORDINAL) var status: Status,
