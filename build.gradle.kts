@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     runtime("mysql:mysql-connector-java")
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -28,8 +29,18 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    //Metric
+    implementation("io.dropwizard.metrics:metrics-core:4.1.21")
+    implementation("io.dropwizard.metrics:metrics-healthchecks:4.1.21")
+
+    //Actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    //Actuator directly to Influx DB
+    implementation("io.micrometer:micrometer-registry-influx:latest.release")
 }
 
 tasks.withType<KotlinCompile> {
