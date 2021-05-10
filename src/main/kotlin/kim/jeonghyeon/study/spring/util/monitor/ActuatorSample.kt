@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration
  * Available Metrics
  *  - https://programming.vip/docs/detailed-usage-of-spring-boot-actuator-monitoring.html
  *  - https://levelup.gitconnected.com/application-monitoring-using-spring-boot-actuators-part-1-dab8576f4db6
+ *  - able to check metric on 127.0.0.1:8080/actuator 127.0.0.1:8080/actuator/metrics
  */
 @Configuration
 class ActuatorSample {
