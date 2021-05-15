@@ -9,6 +9,16 @@
         <property name="LOG_HOME" value="./"/>
     </springProfile>
 
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} \(%line\) - %msg %n
+            </Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${LOG_HOME}/${FILE_PREFIX_NAME}.%d{yyyy-MM-dd}.log.zip</FileNamePattern>
@@ -38,8 +48,17 @@
         </filter>
     </appender>
 
-    <root level="WARN">
-        <appender-ref ref="ASYNC_SLACK" />
-        <appender-ref ref="fileAppender" />
+<!--    <root level="WARN">-->
+<!--        <appender-ref ref="ASYNC_SLACK" />-->
+<!--        <appender-ref ref="fileAppender" />-->
+<!--    </root>-->
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="consoleAppender" />
     </root>
+
+    <logger name="kim.jeonghyeon.study.spring" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="consoleAppender" />
+    </logger>
 </configuration>

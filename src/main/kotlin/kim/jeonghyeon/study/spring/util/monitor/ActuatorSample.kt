@@ -1,11 +1,16 @@
 package kim.jeonghyeon.study.spring.util.monitor
 
+import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.influx.InfluxConfig
+import io.micrometer.influx.InfluxMeterRegistry
 import kim.jeonghyeon.study.spring.util.hostname
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Duration
+
 
 /**
  * Actuator
@@ -24,6 +29,14 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class ActuatorSample {
+
+    @Value("\${management.metrics.export.influx.org}")
+    lateinit var influxOrg: String
+    @Value("\${management.metrics.export.influx.token}")
+    lateinit var influxToken: String
+    @Value("\${management.metrics.export.influx.db}")
+    lateinit var influxDb: String
+
     @Bean
     fun metricsCommonTags(@Value("\${phase}") phase: String?): MeterRegistryCustomizer<MeterRegistry>? {
         return MeterRegistryCustomizer { registry: MeterRegistry ->
@@ -34,4 +47,25 @@ class ActuatorSample {
             )
         }
     }
+
+    @Bean
+    fun meterRegistry():MeterRegistry {
+
+        val config = object : InfluxConfig {
+            override fun step(): Duration {
+                return Duration.ofSeconds(10)
+            }
+
+            override fun db() = influxDb
+
+            override fun get(k: String) = when (k) {
+                "influx.org" -> influxOrg
+                "influx.token" -> influxToken
+                // accept the rest of the defaults
+                else -> null
+            }
+        }
+        return InfluxMeterRegistry(config, Clock.SYSTEM)
+    }
+
 }
